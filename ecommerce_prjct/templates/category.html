@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{category.description|truncatewords:155}}
+    {% else %}
+        Welcome to ES store Where You Can Buy All Clothing Materials
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{category.name}} - ES Store
+    {% else %}
+        See Our New Collections - ES Store
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if category %}
+    <div>
+        <div class="row my_row_class" style="padding-top:15px;">
+            <div class="mx_auto" style="color:#000;font-size:20px;">
+            <p><a href="{% url 'ecommerce_app:allProdCat' %}">Our Product Collections</a> </p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="mx_auto" style="color:#000;font-size:20px;">
+    {% if category %}
+       <center><img class="my_image" style="width:50%;height:auto;" src="{{category.image.url}}" alt="{{category.name}}" height="500px"></center>
+    </div>
+        <br>
+    <div>
+        <h1 class="text-center my_title" style="font-size:40px;text-transform:uppercase;letter-spacing:.2em;">{{category.name}}</h1>
+        <p class="text-center text-justify" style="font-size:10px;text-transform:uppercase;letter-spacing:.2em;">{{category.description}}</p>
+    </div>
+    {% else %}
+    <div>
+        <img class="my_image my_image_padding" style="padding:5px;width:100%;height:auto;" src="{% static 'img/banner.png' %}" alt="Our Products" width="1250px";>
+    </div>
+        <br>
+    <div>
+        <h1 class="text-center my_title" style="font-size:40px;text-transform:uppercase;letter-spacing:.2em;">Our Product Collections</h1>
+        <p class="text-justify">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'</p>
+    </div>
+    {% endif %}
+
+    <div class="container">
+        <div class="row mx_auto" style="color:#000;font-size:20px;">
+        {% for product in products.object_list %}
+            <div class="my_bottom_margin col col-sm-12 col-md-6 col-lg-4" style="margin-bottom:10px;">
+                <div class="card text-center" style="min-width:18rem;">
+                    <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}" width="250px" height="300px"; ></a>
+                        <div class="card-body" style="font-size:20px;text-transform:uppercase;letter-spacing:.2em;">
+                            <h4>{{product.name}}</h4>
+                            <p>${{product.price}}</p>
+                        </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="mx-auto">
+            {% if products.paginator.num_pages > 1 %}
+            <hr>
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if produts.number == pg %} active {% endif %}">{{pg}}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <br>
+    </div>
+{% endblock %}
